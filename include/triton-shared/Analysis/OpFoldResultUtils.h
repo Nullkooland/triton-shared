@@ -12,8 +12,6 @@
 #include "mlir/IR/Location.h"
 #include "mlir/IR/OpDefinition.h"
 
-#include <optional>
-
 namespace mlir {
 
 class OpBuilder;

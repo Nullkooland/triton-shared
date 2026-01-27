@@ -1,5 +1,5 @@
 add_triton_library(TritonPtrToMemref
-  TritonPtrToMemrefPass.cpp
+  TritonPtrToMemref.cpp
 
   DEPENDS
   TritonPtrToMemrefConversionPassIncGen

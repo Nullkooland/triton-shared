@@ -1,6 +1,5 @@
 add_triton_library(StructuredToMemref
   StructuredToMemref.cpp
-  StructuredToMemrefPass.cpp
 
   DEPENDS
   StructuredToMemrefConversionPassIncGen

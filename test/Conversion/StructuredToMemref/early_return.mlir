@@ -1,4 +1,4 @@
-// RUN: triton-shared-opt --triton-to-linalg-experimental %s | FileCheck %s
+// RUN: triton-shared-opt --triton-to-linalg %s | FileCheck %s
 // This is the IR for the following triton program:
 //    @triton.jit
 //    def test_1(in0, out0):

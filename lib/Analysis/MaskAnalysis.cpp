@@ -5,29 +5,22 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "triton-shared/Analysis/MaskAnalysis.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/Support/LogicalResult.h"
+#include "mlir/Transforms/DialectConversion.h"
+#include "llvm/Support/Debug.h"
 
-#include "triton-shared/Analysis/OpFoldResultUtils.h"
-
-#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
 #include "triton/Dialect/Triton/IR/Dialect.h"
 
-#include "mlir/Transforms/DialectConversion.h"
-
-#include "llvm/Support/Casting.h"
-#include "llvm/Support/Debug.h"
-#include "llvm/Support/LogicalResult.h"
-#include <cassert>
+#include "triton-shared/Analysis/MaskAnalysis.h"
+#include "triton-shared/Analysis/OpFoldResultUtils.h"
+#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
 
 #define DEBUG_TYPE "mask-analysis"
 
-namespace mlir {
-
-namespace triton {
+namespace mlir::triton {
 
 LogicalResult MaskState::parse(Value operand, const Location loc,
                                OpBuilder &builder) {
@@ -65,8 +58,7 @@ tensor::ExtractSliceOp MaskState::getExtractSlice(Value source,
   SmallVector<OpFoldResult> offsets(getRank(), builder.getIndexAttr(0));
   SmallVector<OpFoldResult> strides(getRank(), builder.getIndexAttr(1));
 
-  auto dstType = tensor::ExtractSliceOp::inferResultType(sourceType, offsets,
-                                                         dims, strides);
+  auto dstType = tensor::ExtractSliceOp::inferResultType(sourceType, dims);
 
   return builder.create<tensor::ExtractSliceOp>(loc, dstType, source, offsets,
                                                 dims, strides);
@@ -858,5 +850,4 @@ SmallVector<std::pair<unsigned, Value>> MaskState::getUnstructuredMasks() {
   return result;
 }
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton

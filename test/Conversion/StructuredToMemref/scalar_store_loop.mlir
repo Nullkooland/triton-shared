@@ -1,4 +1,4 @@
-// RUN: triton-shared-opt --triton-to-linalg-experimental %s | FileCheck %s
+// RUN: triton-shared-opt --triton-to-linalg %s | FileCheck %s
 // TODO: Fix pending https://github.com/microsoft/triton-shared/pull/215
 // XFAIL: *
 

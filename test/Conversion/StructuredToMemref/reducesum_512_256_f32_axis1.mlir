@@ -1,4 +1,4 @@
-// RUN: triton-shared-opt --split-input-file --triton-to-linalg-experimental %s | FileCheck %s
+// RUN: triton-shared-opt --split-input-file --triton-to-linalg %s | FileCheck %s
 module {
     tt.func @kernel(%afloat : !tt.ptr<f32>,
         %res : !tt.ptr<f32>

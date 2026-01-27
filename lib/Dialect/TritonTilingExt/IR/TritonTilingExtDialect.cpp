@@ -6,7 +6,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
-#include "mlir/Dialect/Linalg/IR/LinalgInterfaces.h"
 #include "mlir/Dialect/Linalg/Utils/Utils.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/Tensor/IR/Tensor.h"
@@ -154,7 +153,7 @@ FailureOr<TilingResult> getTiledImplementation(TritonTilingExtOpTy op,
   auto oneAttr = b.getI64IntegerAttr(1);
 
   for (OpOperand &opOperand : op->getOpOperands()) {
-    unsigned int index = opOperand.getOperandNumber();
+    uint32_t index = opOperand.getOperandNumber();
     auto val = valuesToTile[index];
     auto type = dyn_cast<ShapedType>(val.getType());
 

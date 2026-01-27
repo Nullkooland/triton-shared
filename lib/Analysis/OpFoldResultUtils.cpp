@@ -5,16 +5,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "triton-shared/Analysis/OpFoldResultUtils.h"
-
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/IR/BuiltinAttributes.h"
 #include "mlir/IR/BuiltinTypes.h"
 #include "mlir/IR/OpDefinition.h"
 #include "mlir/Transforms/DialectConversion.h"
+#include "llvm/Support/Debug.h"
+
 #include "triton/Dialect/Triton/IR/Dialect.h"
 
-#include "llvm/Support/Debug.h"
+#include "triton-shared/Analysis/OpFoldResultUtils.h"
+
 #define DEBUG_TYPE "triton-ptr-analysis"
 
 namespace mlir {

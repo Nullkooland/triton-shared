@@ -5,13 +5,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "triton/Dialect/Triton/IR/Types.h"
-
-#include "triton-shared/Analysis/OpFoldResultUtils.h"
-#include "triton-shared/Conversion/StructuredToMemref/StructuredToMemref.h"
-#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
-
+#include "mlir/Dialect/Arith/IR/Arith.h"
+#include "mlir/Dialect/Bufferization/IR/Bufferization.h"
+#include "mlir/Dialect/Linalg/IR/Linalg.h"
+#include "mlir/Dialect/MemRef/IR/MemRef.h"
+#include "mlir/Dialect/Ptr/IR/PtrDialect.h"
+#include "mlir/Dialect/SCF/IR/SCF.h"
+#include "mlir/Dialect/SCF/Transforms/Patterns.h"
+#include "mlir/Dialect/Utils/StaticValueUtils.h"
 #include "mlir/IR/Builders.h"
+#include "mlir/IR/BuiltinAttributes.h"
 #include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/BuiltinTypeInterfaces.h"
 #include "mlir/IR/BuiltinTypes.h"
@@ -21,29 +24,25 @@
 #include "mlir/IR/Types.h"
 #include "mlir/Support/LogicalResult.h"
 #include "mlir/Transforms/DialectConversion.h"
-
-#include "mlir/Dialect/Arith/IR/Arith.h"
-#include "mlir/Dialect/Bufferization/IR/Bufferization.h"
-#include "mlir/Dialect/Linalg/IR/Linalg.h"
-#include "mlir/Dialect/MemRef/IR//MemRef.h"
-#include "mlir/Dialect/SCF/IR/SCF.h"
-#include "mlir/Dialect/Utils/StaticValueUtils.h"
-
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/SmallVector.h"
-#include "llvm/Support/ErrorHandling.h"
 
-#include <algorithm>
-#include <cassert>
-#include <cstdint>
+#include "triton/Dialect/Triton/IR/Types.h"
+
+#include "triton-shared/Analysis/OpFoldResultUtils.h"
+#include "triton-shared/Conversion/StructuredToMemref/Passes.h"
+#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
+#include "triton-shared/Dialect/TritonTilingExt/IR/TritonTilingExtDialect.h"
 
 #define DEBUG_TYPE "structured-to-memref"
 
 using namespace mlir;
 
-#define GEN_PASS_CLASSES
-#include "triton-shared/Conversion/TritonArithToLinalg/Passes.h.inc"
+namespace mlir::triton {
+#define GEN_PASS_DEF_STRUCTUREDTOMEMREF
+#include "triton-shared/Conversion/StructuredToMemref/Passes.h.inc"
+} // namespace mlir::triton
 
 static const std::string WRAP_SIDE_BY_SIDE = "wrap_side_by_side";
 static const std::string WRAP_STACKED = "wrap_stacked";
@@ -1024,9 +1023,7 @@ private:
     SmallVector<OpFoldResult> offsets(rank, b.getIndexAttr(0));
     SmallVector<OpFoldResult> strides(rank, b.getIndexAttr(1));
 
-    auto dstType = tensor::ExtractSliceOp::inferResultType(sourceType, offsets,
-                                                           dims, strides);
-
+    auto dstType = tensor::ExtractSliceOp::inferResultType(sourceType, dims);
     return b.create<tensor::ExtractSliceOp>(loc, dstType, source, offsets, dims,
                                             strides);
   }
@@ -1196,11 +1193,60 @@ public:
   }
 };
 
-} // namespace
+class PtrToUnrankedMemrefConverter : public TypeConverter {
+public:
+  PtrToUnrankedMemrefConverter() {
+    addConversion([](Type type) { return type; });
+    addConversion([](triton::PointerType ptrType) {
+      return UnrankedMemRefType::get(ptrType.getPointeeType(), 0);
+    });
+    addTargetMaterialization([&](OpBuilder &builder,
+                                 UnrankedMemRefType resultType,
+                                 ValueRange inputs, Location loc) -> Value {
+      return builder.create<UnrealizedConversionCastOp>(loc, resultType, inputs)
+          .getResult(0);
+    });
 
-void mlir::triton::populateStructuredToMemrefConversionPatterns(
-    RewritePatternSet &patterns, TypeConverter &typeConverter) {
-  patterns.add<MakeTensorPtrConverter, MakeGatherScatterTensorPtrConverter>(
-      typeConverter, patterns.getContext());
-  patterns.add<LoadConverter, StoreConverter>(patterns.getContext());
-}
+    addSourceMaterialization([&](OpBuilder &builder, Type resultType,
+                                 ValueRange inputs, Location loc) -> Value {
+      return builder.create<UnrealizedConversionCastOp>(loc, resultType, inputs)
+          .getResult(0);
+    });
+  }
+};
+
+class StructuredToMemrefPass
+    : public mlir::triton::impl::StructuredToMemrefBase<
+          StructuredToMemrefPass> {
+  using StructuredToMemrefBase<StructuredToMemrefPass>::StructuredToMemrefBase;
+
+public:
+  void runOnOperation() override {
+    auto moduleOp = getOperation();
+
+    RewritePatternSet patterns(&getContext());
+    ConversionTarget target(getContext());
+
+    target.addLegalDialect<
+        func::FuncDialect, arith::ArithDialect, math::MathDialect,
+        linalg::LinalgDialect, scf::SCFDialect, cf::ControlFlowDialect,
+        tensor::TensorDialect, bufferization::BufferizationDialect,
+        ttx::TritonTilingExtDialect, memref::MemRefDialect, ptr::PtrDialect>();
+
+    target.addIllegalOp<tts::LoadOp, tts::StoreOp, tts::MakeTensorPtrOp>();
+
+    target.addLegalOp<UnrealizedConversionCastOp>();
+
+    PtrToUnrankedMemrefConverter typeConverter;
+
+    patterns.add<MakeTensorPtrConverter, MakeGatherScatterTensorPtrConverter>(
+        typeConverter, patterns.getContext());
+    patterns.add<LoadConverter, StoreConverter>(patterns.getContext());
+
+    if (failed(applyPartialConversion(moduleOp, target, std::move(patterns)))) {
+      signalPassFailure();
+    }
+  }
+};
+
+} // namespace

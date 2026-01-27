@@ -1,4 +1,4 @@
-// RUN: triton-shared-opt --triton-to-linalg-experimental %s | FileCheck %s
+// RUN: triton-shared-opt --triton-to-linalg %s | FileCheck %s
 
 // Make sure extract_slice is generated correctly.
 

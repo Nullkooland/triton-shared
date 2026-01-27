@@ -6,7 +6,7 @@
 #===------------------------------------------------------------------------===#
 
 add_triton_library(UnstructuredToMemref
-  UnstructuredToMemrefPass.cpp
+  UnstructuredToMemref.cpp
 
   DEPENDS
   UnstructuredToMemrefConversionPassIncGen

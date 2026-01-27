@@ -8,15 +8,15 @@
 #ifndef UNSTRUCTURED_TO_MEMREF_CONVERSION_PASSES_H
 #define UNSTRUCTURED_TO_MEMREF_CONVERSION_PASSES_H
 
-#include "triton-shared/Conversion/UnstructuredToMemref/UnstructuredToMemref.h"
+#include "mlir/Pass/Pass.h"
+#include "mlir/Transforms/DialectConversion.h"
 
-namespace mlir {
-namespace triton {
+namespace mlir::triton {
 
+#define GEN_PASS_DECL
 #define GEN_PASS_REGISTRATION
 #include "triton-shared/Conversion/UnstructuredToMemref/Passes.h.inc"
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton
 
 #endif

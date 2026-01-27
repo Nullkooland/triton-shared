@@ -5,6 +5,14 @@ include "mlir/Pass/PassBase.td"
 
 def StructuredToMemref : Pass<"structured-to-memref", "mlir::ModuleOp"> {
   let summary = "Convert triton structured pointer ops to memref";
+  let dependentDialects = [
+    "arith::ArithDialect",
+    "memref::MemRefDialect",
+    "bufferization::BufferizationDialect",
+    "scf::SCFDialect",
+    "linalg::LinalgDialect",
+    "tensor::TensorDialect",
+  ];
 }
 
 #endif

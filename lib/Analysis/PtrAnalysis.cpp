@@ -5,20 +5,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "triton-shared/Analysis/PtrAnalysis.h"
-#include "triton-shared/Analysis/OpFoldResultUtils.h"
-
 #include "mlir/IR/IRMapping.h"
 #include "mlir/Transforms/DialectConversion.h"
-
 #include "llvm/Support/Debug.h"
-#include <set>
+
+#include "triton-shared/Analysis/OpFoldResultUtils.h"
+#include "triton-shared/Analysis/PtrAnalysis.h"
 
 #define DEBUG_TYPE "triton-ptr-analysis"
 
-namespace mlir {
-
-namespace triton {
+namespace mlir::triton {
 
 static void assertValidUnrealizedCast(UnrealizedConversionCastOp op) {
   assert(op && op->hasAttr(ModuloState::WraparoundAttr) &&
@@ -1371,5 +1367,4 @@ Value PtrAnalysis::getScalarMemRef(Value ptr, Value memRef, const Location loc,
   return castOp.getResult();
 }
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton

@@ -6,7 +6,9 @@
 
 add_triton_library(TritonToLinalg
   TritonToLinalg.cpp
-  TritonToLinalgPass.cpp
+  ReconcilePtrCasts.cpp
+  TritonToPtr.cpp
+  CollapseShape.cpp
 
   DEPENDS
   TritonToLinalgConversionPassIncGen
@@ -24,4 +26,12 @@ add_triton_library(TritonToLinalg
   TritonIR
   TritonTransforms
   TritonSharedAnalysis
+  TritonSharedUtils
+
+  TritonArithToLinalg
+  StructuredToMemref
+  TritonToStructured
+  TritonToUnstructured
+  TritonPtrToMemref
+  UnstructuredToMemref
 )

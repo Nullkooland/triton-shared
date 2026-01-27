@@ -1,6 +1,6 @@
-// RUN: triton-shared-opt --triton-to-linalg-experimental --cse %s | FileCheck %s
+// RUN: triton-shared-opt --triton-to-linalg --cse %s | FileCheck %s
 
-// RUN: triton-shared-opt --triton-to-linalg-experimental="enable-make-gather-scatter=false" %s | FileCheck %s --check-prefix=NO_GATHER
+// RUN: triton-shared-opt --triton-to-linalg="enable-make-gather-scatter=false" %s | FileCheck %s --check-prefix=NO_GATHER
 
 // Make sure no extract_slice when enable-make-gather-scatter=false..
 // NO_GATHER-LABLE: func.func @row_gather2(

@@ -13,8 +13,7 @@
 
 #include "triton/Dialect/Triton/IR/Dialect.h"
 
-namespace mlir {
-namespace triton {
+namespace mlir::triton {
 
 std::unique_ptr<Pass> createTritonUseAnalysisPass();
 
@@ -113,7 +112,6 @@ private:
 // delete meta data producers.
 LogicalResult runUseAnalysis(triton::FuncOp &funcOp);
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton
 
 #endif // TRITON_CONVERSION_TRITONTOAFFINE_TRITONUSEANALYSIS_H

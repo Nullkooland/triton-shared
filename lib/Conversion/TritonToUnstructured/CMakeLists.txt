@@ -1,5 +1,5 @@
 add_triton_library(TritonToUnstructured
-  TritonToUnstructuredPass.cpp
+  TritonToUnstructured.cpp
 
   DEPENDS
   TritonStructuredTableGen

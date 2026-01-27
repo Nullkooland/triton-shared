@@ -68,7 +68,7 @@ def TritonTilingExtInterface : OpInterface<"TritonTilingExtInterface"> {
       /*retTy=*/"AffineMap",
       /*methodName=*/"getInputIndexingMap",
       /*args=*/(ins "MLIRContext*":$context,
-                    "unsigned int":$index,
+                    "uint32_t":$index,
                     "ArrayRef<OpFoldResult>":$tileSizes)
     >,
     InterfaceMethod<
@@ -80,7 +80,7 @@ def TritonTilingExtInterface : OpInterface<"TritonTilingExtInterface"> {
       /*retTy=*/"AffineMap",
       /*methodName=*/"getOutputIndexingMap",
       /*args=*/(ins "MLIRContext*":$context,
-                    "unsigned int":$index,
+                    "uint32_t":$index,
                     "ArrayRef<OpFoldResult>":$tileSizes)
     >,
     InterfaceMethod<
@@ -93,7 +93,7 @@ def TritonTilingExtInterface : OpInterface<"TritonTilingExtInterface"> {
       /*retTy=*/"AffineMap",
       /*methodName=*/"getIndexingMap",
       /*args=*/(ins "MLIRContext*":$context,
-                    "unsigned int":$index,
+                    "uint32_t":$index,
                     "ArrayRef<OpFoldResult>":$tileSizes)
     >
   ];

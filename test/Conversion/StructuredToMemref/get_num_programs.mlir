@@ -6,7 +6,7 @@
 //       But not if creating constant 0 and add it to a pointer is optimized away:
 //         %6 = tt.splat %arg0 : !tt.ptr<i32> -> tensor<1x!tt.ptr<i32>>
 //       A patch that rewrites tt.splat in such case will be sent separately.
-// RUN: triton-shared-opt --split-input-file --triton-to-linalg-experimental %s | FileCheck %s
+// RUN: triton-shared-opt --split-input-file --triton-to-linalg %s | FileCheck %s
 
 module {
   tt.func public @num_programs(%arg0: !tt.ptr<i32>) {

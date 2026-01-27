@@ -5,35 +5,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "triton-shared/AnalysisStructured/PtrAnalysis.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/IR/BuiltinTypes.h"
+#include "mlir/IR/IRMapping.h"
 #include "mlir/IR/Value.h"
 #include "mlir/IR/Visitors.h"
 #include "mlir/Support/LLVM.h"
 #include "mlir/Support/LogicalResult.h"
-#include "triton-shared/Analysis/MaskAnalysis.h"
-#include "triton-shared/Analysis/OpFoldResultUtils.h"
-
-#include "mlir/IR/IRMapping.h"
 #include "mlir/Transforms/DialectConversion.h"
-#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
-#include "triton/Dialect/Triton/IR/Dialect.h"
-#include "triton/Dialect/Triton/IR/Types.h"
-
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/ADT/TypeSwitch.h"
-#include "llvm/Support/Casting.h"
 #include "llvm/Support/Debug.h"
-#include "llvm/Support/LogicalResult.h"
-#include <cassert>
-#include <cstddef>
-#include <optional>
-#include <queue>
-#include <string>
+
+#include "triton/Dialect/Triton/IR/Dialect.h"
+#include "triton/Dialect/Triton/IR/Types.h"
+
+#include "triton-shared/Analysis/MaskAnalysis.h"
+#include "triton-shared/Analysis/OpFoldResultUtils.h"
+#include "triton-shared/AnalysisStructured/PtrAnalysis.h"
+#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
 
 #define DEBUG_TYPE "triton-ptr-analysis"
 

@@ -11,21 +11,15 @@
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
-
 #include "mlir/IR/Value.h"
 #include "mlir/Support/LLVM.h"
 #include "mlir/Support/LogicalResult.h"
-#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
+
 #include "triton/Dialect/Triton/IR/Dialect.h"
 
-#include <cstddef>
-#include <set>
+#include "triton-shared/Dialect/TritonStructured/IR/TritonStructuredDialect.h"
 
-namespace mlir {
-
-class OpBuilder;
-
-namespace tts {
+namespace mlir::tts {
 
 const extern std::string ptrAnalysisAttr;
 
@@ -374,8 +368,6 @@ public:
   LogicalResult rewriteOp(Operation *op, bool useUnsafeMask = false);
 };
 
-} // namespace tts
-
-} // namespace mlir
+} // namespace mlir::tts
 
 #endif

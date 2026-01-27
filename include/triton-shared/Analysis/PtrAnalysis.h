@@ -11,16 +11,11 @@
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
+#include "mlir/Transforms/DialectConversion.h"
 
 #include "triton/Dialect/Triton/IR/Dialect.h"
 
-#include <set>
-
-namespace mlir {
-
-class ConversionPatternRewriter;
-
-namespace triton {
+namespace mlir::triton {
 
 struct ModuloState {
   Value size;
@@ -264,8 +259,6 @@ public:
                                ConversionPatternRewriter &rewriter);
 };
 
-} // namespace triton
-
-} // namespace mlir
+} // namespace mlir::triton
 
 #endif

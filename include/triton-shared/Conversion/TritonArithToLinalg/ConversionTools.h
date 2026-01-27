@@ -1,10 +1,10 @@
 #ifndef TRITON_CONVERSION_TRITONARITHTOLINALG_CONVERSIONTOOLS_H
 #define TRITON_CONVERSION_TRITONARITHTOLINALG_CONVERSIONTOOLS_H
 
-#include "mlir/Dialect/Affine/IR/AffineOps.h"
+#include "mlir/Dialect/Utils/StructuredOpsUtils.h"
+#include "mlir/IR/BuiltinTypes.h"
 
-namespace mlir {
-namespace triton {
+namespace mlir::triton {
 
 static inline SmallVector<utils::IteratorType>
 getNParallelLoopsAttrs(unsigned n) {
@@ -54,7 +54,6 @@ getBroadcastAffineMap(MLIRContext *context, ArrayRef<int64_t> inputShape,
   return AffineMap::get(broadcastToShape.size(), 0, outExpr, context);
 }
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton
 
 #endif // TRITON_CONVERSION_TRITONARITHTOLINALG_CONVERSIONTOOLS_H

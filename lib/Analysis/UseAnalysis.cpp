@@ -5,18 +5,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "triton-shared/Analysis/UseAnalysis.h"
-
-#include "triton/Dialect/Triton/IR/Dialect.h"
-
 #include "mlir/Analysis/DataFlow/ConstantPropagationAnalysis.h"
 #include "mlir/Analysis/DataFlow/DeadCodeAnalysis.h"
-
 #include "llvm/ADT/TypeSwitch.h"
 #include "llvm/Support/Debug.h"
 
+#include "triton-shared/Analysis/UseAnalysis.h"
+#include "triton/Dialect/Triton/IR/Dialect.h"
+
 using namespace mlir;
-using namespace triton;
 using namespace dataflow;
 
 #define DEBUG_TYPE "triton-use-analysis"

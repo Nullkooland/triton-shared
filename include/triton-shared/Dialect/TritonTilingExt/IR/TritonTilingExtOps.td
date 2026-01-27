@@ -146,7 +146,7 @@ class TritonTilingExt_TilingOp<string mnemonic> : Op<TritonTilingExt_Dialect, mn
     }
 
     AffineMap $cppClass::getIndexingMap(MLIRContext *context,
-                             unsigned int index,
+                             uint32_t index,
                              ArrayRef<OpFoldResult> sizes) {
       assert(index < this->getNumOperands());
       if (index < getNumDpsInputs()) {

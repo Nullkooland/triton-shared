@@ -1,15 +1,15 @@
 #ifndef TRITON_TO_STRUCTURED_CONVERSION_PASSES_H
 #define TRITON_TO_STRUCTURED_CONVERSION_PASSES_H
 
-#include "triton-shared/Conversion/TritonToStructured/TritonToStructured.h"
+#include "mlir/Pass/Pass.h"
+#include "mlir/Transforms/DialectConversion.h"
 
-namespace mlir {
-namespace triton {
+namespace mlir::triton {
 
+#define GEN_PASS_DECL
 #define GEN_PASS_REGISTRATION
 #include "triton-shared/Conversion/TritonToStructured/Passes.h.inc"
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton
 
 #endif

@@ -1,15 +1,15 @@
 #ifndef TRITON_PTR_TO_MEMREF_CONVERSION_PASSES_H
 #define TRITON_PTR_TO_MEMREF_CONVERSION_PASSES_H
 
-#include "triton-shared/Conversion/TritonPtrToMemref/TritonPtrToMemref.h"
+#include "mlir/Pass/Pass.h"
+#include "mlir/Transforms/DialectConversion.h"
 
-namespace mlir {
-namespace triton {
+namespace mlir::triton {
 
+#define GEN_PASS_DECL
 #define GEN_PASS_REGISTRATION
 #include "triton-shared/Conversion/TritonPtrToMemref/Passes.h.inc"
 
-} // namespace triton
-} // namespace mlir
+} // namespace mlir::triton
 
 #endif

@@ -1,4 +1,4 @@
-// RUN: not triton-shared-opt --split-input-file --triton-to-linalg-experimental %s 2>&1 | FileCheck %s
+// RUN: not triton-shared-opt --split-input-file --triton-to-linalg %s 2>&1 | FileCheck %s
 module {
   tt.func public @make_tensor_ptr_error(%arg0: !tt.ptr<f32> {tt.divisibility = 16 : i32}, %arg1: !tt.ptr<f32> {tt.divisibility = 16 : i32}, %arg2: i32 {tt.divisibility = 16 : i32}) attributes {noinline = false} {
     %c1_i64 = arith.constant 1 : i64

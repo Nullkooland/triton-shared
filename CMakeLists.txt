@@ -9,6 +9,8 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include) # Tablegen'd files
 include_directories(${Python3_INCLUDE_DIR})
 include_directories(${pybind11_INCLUDE_DIR})
 
+add_compile_options(-Wno-deprecated-declarations)
+
 function(add_symlink source_file link_name)
     if (EXISTS ${source_file})
         file(CREATE_LINK ${source_file} ${link_name} SYMBOLIC)

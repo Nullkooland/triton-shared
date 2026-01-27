@@ -13,11 +13,7 @@
 // non-contiguous memory.
 //===----------------------------------------------------------------------===//
 
-#include "mlir/Dialect/Affine/IR/AffineOps.h"
-
 #include "triton-shared/Dialect/TritonTilingExt/IR/TritonTilingExtDialect.h"
-
-#include "llvm/Support/Debug.h"
 
 #define DEBUG_TYPE "ttx-cumsum"
 
@@ -73,14 +69,14 @@ mlir::LogicalResult ttx::CumSumOp::verify() {
 }
 
 AffineMap ttx::CumSumOp::getInputIndexingMap(MLIRContext *context,
-                                             unsigned int index,
+                                             uint32_t index,
                                              ArrayRef<OpFoldResult> sizes) {
   assert(index == 0);
   return AffineMap::getMultiDimIdentityMap(getRank(), context);
 }
 
 AffineMap ttx::CumSumOp::getOutputIndexingMap(MLIRContext *context,
-                                              unsigned int index,
+                                              uint32_t index,
                                               ArrayRef<OpFoldResult> sizes) {
   assert(index == 0);
   return AffineMap::getMultiDimIdentityMap(getRank(), context);

@@ -1,4 +1,4 @@
-// RUN: triton-shared-opt --split-input-file --triton-to-linalg-experimental %s | FileCheck %s
+// RUN: triton-shared-opt --split-input-file --triton-to-linalg %s | FileCheck %s
 
 // CHECK:           #map = affine_map<(d0) -> (d0)>
 // CHECK:           #map1 = affine_map<(d0, d1) -> (d0, d1)>

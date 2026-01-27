@@ -5,7 +5,6 @@ include "mlir/Pass/PassBase.td"
 
 def TritonToStructured : Pass<"triton-to-structured", "mlir::ModuleOp"> {
   let summary = "Convert Triton non-block pointer to TritonStructured dialect";
-  let constructor = "triton::createTritonToStructuredPass()";
   let options = [
       Option<"enableMakeGatherScatterTensorPtr", "enable-make-gather-scatter", "bool", /*default*/"true",
              "Enable make_gather_scatter_tptr support">,
@@ -15,6 +14,11 @@ def TritonToStructured : Pass<"triton-to-structured", "mlir::ModuleOp"> {
              "Skip the prepass">,
       Option<"useUnsafeMask", "use-unsafe-mask", "bool", /*default*/"false",
              "Assume that the mask bounds are never less than starting offsets. May produce incorrect results.">
+  ];
+  let dependentDialects = [
+    "scf::SCFDialect",
+    "tensor::TensorDialect",
+    "tts::TritonStructuredDialect",
   ];
 }
 
